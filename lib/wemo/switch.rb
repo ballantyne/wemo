@@ -27,9 +27,9 @@ module Wemo
     end
 
     def send_message(name, value)
-      action = "#{DEVICE_XMLNS}##{name}"
+      action = "#{XMLNS}##{name}"
       attribute = name.sub('Set', '')
-      message = %Q{<u:#{name} xmlns:u="#{DEVICE_XMLNS}"><Desired#{attribute}>#{value}</Desired#{attribute}>}
+      message = %Q{<u:#{name} xmlns:u="#{XMLNS}"><Desired#{attribute}>#{value}</Desired#{attribute}>}
       soap_client.call(name, soap_action: action, message: message)
     end
   end
