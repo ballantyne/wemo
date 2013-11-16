@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Wemo::VERSION
   spec.authors       = ["Scott Ballantyne"]
   spec.email         = ["ussballantyne@gmail.com"]
-  spec.description   = %q{trying to make it work}
+  spec.description   = %q{this is a combo.  I took several things from around and fixed them, mostly taken from https://github.com/bobbrodie/siriproxy-wemo}
   spec.summary       = %q{trying to make it work}
   spec.homepage      = ""
   spec.license       = "MIT"

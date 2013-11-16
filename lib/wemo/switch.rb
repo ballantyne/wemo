@@ -1,36 +1,54 @@
-require 'savon'
-
+require 'curb'
+require 'simple_upnp'
 module Wemo
   class Switch
-    PORT = 49153
-    ENDPOINT = '/upnp/control/basicevent1'
-    XMLNS = 'urn:Belkin:service:basicevent:1'
+    def self.send_command(wemo, action)
+      case action
+      when "on"
+        signal = 1
+      when "off"
+        signal = 0
+      end
+      include_location_details = true
+      wemo_device = nil
+      device_name = nil
+      device_location = nil
 
-    attr_accessor :ip
+      SimpleUpnp::Discovery.find do |device|
+        begin
+          device_json = device.to_json(include_location_details)
+        rescue
+          next
+        end
 
-    def initialize(ip)
-      @ip = ip
-    end
-
-    def on
-      send_message('GetBinaryState')
-    end
-
-    def on=(state)
-      send_message('SetBinaryState', state.to_i)
-    end
-
-  # private
-
-    def soap_client
-      @soap_client ||= Savon.client endpoint: "http://#{ip}:#{PORT}#{ENDPOINT}", namespace: NAMESPACE
-    end
-
-    def send_message(name, value)
-      action = "#{XMLNS}##{name}"
-      attribute = name.sub('Set', '')
-      message = %Q{<u:#{name} xmlns:u="#{XMLNS}"><Desired#{attribute}>#{value}</Desired#{attribute}>}
-      soap_client.call(name, soap_action: action, message: message)
+        # puts device_json.inspect
+        
+        if device_json['root']
+          if device_json['root']['device']
+            if device_json['root']['device']['friendlyName']
+              friendlyName = device_json['root']['device']['friendlyName']
+              puts "WeMo Friendly Name: " + friendlyName
+              if friendlyName.downcase == wemo.strip.downcase
+                wemo_device = device_json['root']['device']
+                device_name = friendlyName
+                device_location = /https?:\/\/[\S]+\//.match(device.location)
+                break
+              end
+            end
+          end
+        end
+      end
+      if wemo_device
+        c = Curl::Easy.new(device_location.to_s + 'upnp/control/basicevent1')
+        c.headers["Content-type"] = 'text/xml; charset="utf-8"'
+        c.headers["SOAPACTION"] = "\"urn:Belkin:service:basicevent:1#SetBinaryState\""
+        c.verbose = false
+        begin
+          c.http_post("<?xml version='1.0' encoding='utf-8'?><s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'><s:Body><u:SetBinaryState xmlns:u='urn:Belkin:service:basicevent:1'><BinaryState>#{signal}</BinaryState></u:SetBinaryState></s:Body></s:Envelope>")
+          c.perform
+        rescue Curb::Err
+        end
+      end
     end
   end
 end
