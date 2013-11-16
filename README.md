@@ -1,6 +1,6 @@
 # Wemo
 
-TODO: Write a gem description
+I sort of combined some stuff.  Hopefully noone is upset about the combination, I tried to make it clear where I found stuff.
 
 ## Installation
 
@@ -16,9 +16,20 @@ Or install it yourself as:
 
     $ gem install wemo
 
+Use from the command line:
+
+    $ wemo start friendlyName
+
+    $ wemo start light
+    $ wemo start pump
+    $ wemo stop pump
+    $ wemo stop light
+    $ wemo start 'exhaust fan'
+
 ## Usage
 
-TODO: Write usage instructions here
+  Wemo.off('friendlyName')
+  Wemo.on('friendlyName')
 
 ## Contributing
 
