@@ -1,3 +1,5 @@
+# most of this was taken from https://github.com/bobbrodie/siriproxy-wemo.
+
 require 'curb'
 require 'simple_upnp'
 module Wemo
@@ -27,7 +29,7 @@ module Wemo
           if device_json['root']['device']
             if device_json['root']['device']['friendlyName']
               friendlyName = device_json['root']['device']['friendlyName']
-              puts "WeMo Friendly Name: " + friendlyName
+              # puts "WeMo Friendly Name: " + friendlyName
               if friendlyName.downcase == wemo.strip.downcase
                 wemo_device = device_json['root']['device']
                 device_name = friendlyName
@@ -48,6 +50,7 @@ module Wemo
           c.perform
         rescue Curb::Err
         end
+        # c.body_str
       end
     end
   end

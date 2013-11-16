@@ -1,3 +1,14 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+require 'curb'
+require 'simple_upnp'
+require 'wemo'
 
-puts 'inside bin'
+# puts ARGV.inspect
+
+case ARGV[0]
+when "start"
+  Wemo::Switch.send_command(ARGV[1], 'on')
+when "stop"
+  Wemo::Switch.send_command(ARGV[1], 'off')
+end
