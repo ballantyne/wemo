@@ -28,8 +28,8 @@ Use from the command line:
 
 ## Usage
 
-  Wemo.off('friendlyName')
-  Wemo.on('friendlyName')
+    Wemo.off('friendlyName')
+    Wemo.on('friendlyName')
 
 ## Contributing
 
