@@ -11,4 +11,8 @@ module Wemo
   def self.off(name)
     Wemo::Switch.send_command(name, 'off')
   end
+
+  def self.status(name)
+    Wemo::Switch.status(name)
+  end
 end

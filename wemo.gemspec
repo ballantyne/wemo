@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_dependency 'simple_upnp'
   spec.add_dependency 'curb'
+  spec.add_dependency 'nokogiri'
 end
